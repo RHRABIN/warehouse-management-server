@@ -37,6 +37,20 @@ async function run() {
             console.log(item)
             res.send(item);
         })
+        // add item quantity
+        app.put('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateInfo = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upset: true }
+            const updateDoc = {
+                $set: {
+                    quantity: updateInfo.quantity
+                }
+            }
+            const result = await furnitureItem.updateOne(filter, updateDoc, options);
+            res.send(result)
+        })
 
     }
     finally {
@@ -46,7 +60,7 @@ async function run() {
 run().catch(console.dir)
 
 app.get('/', (req, res) => {
-    res.send('this server is running')
+    res.send('smart furniture server is running')
 })
 app.listen(port, () => {
     console.log("Project is run: ", port)
