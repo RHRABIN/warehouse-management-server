@@ -19,7 +19,7 @@ async function run() {
     try {
         await client.connect();
         const furnitureItem = client.db("furniture").collection("items");
-
+        const myItems = client.db("furniture").collection("myItems");
         app.get('/items', async (req, res) => {
             const query = {};
             const cursor = furnitureItem.find(query);
@@ -58,7 +58,25 @@ async function run() {
             const result = await furnitureItem.deleteOne(query);
             res.send(result);
         })
-
+        // add new item api
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            const result = await furnitureItem.insertOne(newItem);
+            res.send(result);
+            console.log(result)
+        })
+        // my Added items from user input
+        app.post('/myItems', async (req, res) => {
+            const item = req.body;
+            const result = await myItems.insertOne(item);
+            res.send(result)
+        })
+        app.get('myItems', async (req, res) => {
+            const query = {};
+            const cursor = myItems.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
     }
     finally {
 
