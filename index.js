@@ -37,7 +37,7 @@ async function run() {
             console.log(item)
             res.send(item);
         })
-        // add item quantity
+        // increase  & decrease item quantity api
         app.put('/items/:id', async (req, res) => {
             const id = req.params.id;
             const updateInfo = req.body;
@@ -50,6 +50,13 @@ async function run() {
             }
             const result = await furnitureItem.updateOne(filter, updateDoc, options);
             res.send(result)
+        })
+        //delte items api
+        app.delete('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await furnitureItem.deleteOne(query);
+            res.send(result);
         })
 
     }
