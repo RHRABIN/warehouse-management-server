@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
 const app = express();
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 // midleware 
@@ -34,6 +35,14 @@ async function run() {
             const item = await furnitureItem.findOne(query);
             console.log(item)
             res.send(item);
+        })
+        // Auth jwt
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
+                expireIn: '1d'
+            })
+            res.send({ accessToken })
         })
         // increase  & decrease item quantity api
         app.put('/items/:id', async (req, res) => {
