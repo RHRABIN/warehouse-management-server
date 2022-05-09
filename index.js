@@ -7,8 +7,6 @@ require('dotenv').config();
 // midleware 
 app.use(cors());
 app.use(express.json());
-// 0cUWMG3lD1zdbfYa
-// furniture
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -58,6 +56,12 @@ async function run() {
             const result = await furnitureItem.deleteOne(query);
             res.send(result);
         })
+        app.delete('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await furnitureItem.deleteOne(query);
+            res.send(result);
+        })
         // add new item api
         app.post('/items', async (req, res) => {
             const newItem = req.body;
@@ -71,11 +75,18 @@ async function run() {
             const result = await myItems.insertOne(item);
             res.send(result)
         })
-        app.get('myItems', async (req, res) => {
+        app.get('/myItems', async (req, res) => {
             const query = {};
             const cursor = myItems.find(query);
             const result = await cursor.toArray();
             res.send(result)
+        })
+        //delte MyItems api
+        app.delete('/myItems/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await myItems.deleteOne(query);
+            res.send(result);
         })
     }
     finally {
